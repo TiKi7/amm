@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AMM Visualization</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: white;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        #controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            background: #2a2a2a;
+            padding: 8px;
+            border-radius: 4px;
+            margin: 10px;
+            z-index: 2; /* Ensure controls are above canvas */
+            position: relative; /* Needed for z-index */
+        }
+
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: none; /* Only disable touch actions on the canvas */
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            position: relative; /* Needed for z-index */
+            z-index: 3; /* Ensure inputs are above everything */
+        }
+
+        input[type="number"] {
+            width: 80px;
+            background: #333;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 4px;
+            border-radius: 3px;
+            font-size: 12px;
+            position: relative;
+            z-index: 3;
+            touch-action: manipulation; /* Enable touch for inputs */
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #666;
+        }
+
+        /* Remove number input arrows */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        button {
+            cursor: pointer;
+            background: #333;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            position: relative;
+            z-index: 3;
+            touch-action: manipulation; /* Enable touch for buttons */
+        }
+
+        button:hover {
+            background: #444;
+        }
+
+        label {
+            color: #888;
+        }
+
+        .divider {
+            color: #444;
+            margin: 0 8px;
+        }
+
+        /* Mobile styles */
+        @media (max-width: 767px) {
+            body {
+                padding: 0;
+            }
+
+            #controls {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                margin: 0;
+                border-radius: 0;
+                flex-direction: column;
+                padding: 16px;
+                gap: 12px;
+                background: rgba(42, 42, 42, 0.95);
+                backdrop-filter: blur(10px);
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+                z-index: 100;
+            }
+
+            .input-group {
+                width: 100%;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            input[type="number"] {
+                width: 120px;
+                height: 40px;
+                font-size: 16px;
+                padding: 8px;
+            }
+
+            button {
+                height: 40px;
+                min-width: 44px;
+                font-size: 16px;
+                padding: 8px 16px;
+            }
+
+            #canvas-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                padding: 0;
+                margin: 0;
+            }
+
+            .divider {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <div class="input-group">
+            <input type="number" id="tokenA" value="1000" step="any" oninput="updateTokens()">
+            <button onclick="resetInitialValues()">↻</button>
+            <input type="number" id="tokenB" value="0.02" step="any" oninput="updateTokens()">
+        </div>
+        <div class="divider">|</div>
+        <div class="input-group">
+            <input type="number" id="deltaA" value="0" step="any" placeholder="ΔA">
+            <button onclick="applyDeltas()">Apply</button>
+            <input type="number" id="deltaB" value="0" step="any" placeholder="ΔB">
+        </div>
+    </div>
+    <div id="canvas-container"></div>
+    <script src="sketch.js"></script>
+</body>
+</html>
